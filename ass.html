@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+<button id="btn">获取资源</button>
+<script>
+    var oBtn = document.getElementById('btn');
+    oBtn.onclick=function(){
+        oScript = document.createElement('script');
+        oScript.src = "http://suggestion.baidu.com/su?wd=aa&cb=test";
+        document.body.appendChild(oScript);
+        document.body.removeChild(oScript);
+    }
+    function test(data){
+        console.log(data);
+    }
+</script>
+</body>
+</html>
