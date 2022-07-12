@@ -126,7 +126,7 @@
     height: 100%;
     z-index: -10;
     object-fit: cover;
-    src: "https://rastart.top/wallp/wp1.jpg";
+    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg";
     overflow: hidden;
 }
 
@@ -362,7 +362,7 @@
         width: 80px;
         height: 80px;
         text-align: center;
-        font-size: 30px;
+        font-size: 20px;
         overflow: hidden;
         line-height: 80px;
         border-radius: 13px;
@@ -373,7 +373,7 @@
     }
     
     .mail {
-        font-size: 30px;
+        font-size: 20px;
         overflow: hidden;
         line-height: 80px;
         position: absolute;
@@ -389,7 +389,7 @@
     }
     
     .music {
-        font-size: 30px;
+        font-size: 20px;
         overflow: hidden;
         line-height: 80px;
         position: absolute;

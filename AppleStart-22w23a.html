@@ -3,68 +3,74 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width， initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
     <link rel="stylesheet" href="./src/iconfont.css">
     <link rel=" icon" href="Apple.png">
     <link rel="icon" href="Apple.png" type="image/x-ico">
     <script>
-        const support_lang = ['中文', '汉语', '英语', '法语', '德语', '俄语', '拉丁语', '日语', '韩语', '意大利语', '葡萄牙语']
-        const lang_dic = {
-            '中文': 'zh-CN', '汉语': 'zh-CN', '英语': 'en', '法语': 'fr', '德语': 'de', '俄语': 'ru', '拉丁语': 'la', '日语': 'ja', '韩语': 'ko', '意大利语': 'it', '葡萄牙语': 'pt',
-        }
-        const length_unit = {
-            "m": 1, "meter": 1, "meters": 1, "cm": 0.01, "dm": 0.1, "mm": 0.001, "km": 1000, "inch": 0.0254, "inches": 0.0254, "ft": 0.3048, "mile": 1609.344, "miles": 1609.344, "米": 1, "厘米": 0.01, "分米": 0.1, "毫米": 0.001, "千米": 1000, "公里": 1000, "里": 500, "英寸": 0.0254, "英尺": 0.3048, "英里": 1609.344
-        }
-        const data_unit = {
-            "b": 0.125, "B": 1, "Kb": 128, "KB": 1024, "Mb": 131072, "MB": 1048576, "Gb": 134217728, "GB": 1073741824
+        function getJsonLength(jsonData) {
+            var length;
+            for(var ever in jsonData) {
+                length++;
+            }
+            return length;
         }
         function load_settings() {
-            var default_settings = ['true', 'false', 'true', 'true'];
-            for (var i = 0; i < 4; i++) {
+            var default_settings = { "weather": true, "motion": true, "blur": true, "hitokoto": true , "time_sync": true};
+            var i = 0;
+            if (localStorage.getItem("settings") == null) {
+                current_settings = default_settings;
+                localStorage.setItem("settings", JSON.stringify(default_settings));
+            }
+            var current_settings = JSON.parse(localStorage.getItem("settings"));
+            if (getJsonLength(current_settings)!=getJsonLength(default_settings))
+            {
+                current_settings = default_settings;
+                localStorage.setItem("settings", JSON.stringify(current_settings));
+            }
+            for (setting in current_settings) {
                 var check = document.getElementById("settings_check_box")[i];
-                var local_settings = localStorage.getItem(check.name);
-                if (local_settings == null) {
-                    localStorage.setItem(check.name, default_settings[i]);
-                }
-                if (local_settings == 'true') {
+                if (current_settings[setting] == true) {
                     check.checked = true;
                 }
                 else {
                     check.checked = false;
                 }
+                i++;
             }
             var url = localStorage.getItem('pic');
             document.getElementById("wallpaper_link").value = url;
-            //由于firefox不支持backdrop-filter,因此将其设为不可用状态.
             if (navigator.userAgent.indexOf('Firefox') >= 0) {
-                localStorage.setItem("blur", "false");
-                document.getElementById("settings_check_box")[2].setAttribute("disabled", "true");
-                document.getElementById("settings_check_box")[2].checked = false;
-                document.getElementById("settings_txt").children[2].innerHTML = "元素背景模糊(Firefox不支持)";
+                document.getElementById("settings_txt").children[2].innerHTML = "元素背景模糊(Firefox需要手动开启,<a href='https://blog.rastart.top/#/ziwen/Firefox_backdrop'>教程</a>)";
             }
         }
 
+        function get_settings(name) {
+            var current_settings = JSON.parse(localStorage.getItem("settings"));
+            return current_settings[name];
+        }
+
         function refresh_weather() {
-            if (localStorage.getItem('weather') == 'false') {
+            if (get_settings('weather') == false) {
                 var weather_div = document.getElementById("he-plugin-simple");
                 weather_div.style.display = 'none';
             }
-            else if (localStorage.getItem('weather') == 'true') {
+            else if (get_settings('weather') == true) {
                 var weather_div = document.getElementById("he-plugin-simple");
                 weather_div.style.display = 'inline';
+                document.getElementById("weather").setAttribute("src", "https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0");
             }
         }
 
         function save_settings() {
-            for (var i = 0; i < 4; i++) {
+            var current_settings = JSON.parse(localStorage.getItem("settings"));
+            var i = 0;
+            for (setting in current_settings) {
                 var check = document.getElementById("settings_check_box")[i];
-                if (check.checked == true) {
-                    localStorage.setItem(check.name, 'true');
-                }
-                else {
-                    localStorage.setItem(check.name, 'false');
-                }
+                current_settings[setting] = check.checked;
+                i++;
             }
+            localStorage.setItem("settings", JSON.stringify(current_settings));
             refresh_weather();
             load_blur();
         }
@@ -77,22 +83,6 @@
                 document.getElementById("hitokoto").style.display = 'inline';
             }
         }
-
-
-        function about_close() {
-            //动画
-            if (localStorage.getItem('motion') == 'false') {
-                document.getElementById("about_box").style.animationName = "about_disappear";
-                document.getElementById("about_box").style.animationDuration = "0.3s"
-                //这里要等动画搞完再设置关于框的显示属性
-                setTimeout('document.getElementById("about_box").style.display="none";document.getElementById("body").style.pointerEvents="auto";', 280);
-            }
-            else {
-                document.getElementById("about_box").style.display = "none";
-                document.getElementById("body").style.pointerEvents = "auto";
-            }
-        }
-
 
         function drop_appear() {
             document.getElementById('engine_txt').setAttribute("appear", "true");
@@ -109,48 +99,82 @@
         }
 
 
-        function settings_close() {
-            if (localStorage.getItem('motion') == 'false') {
-                document.getElementById("settings").style.animationName = "settings_disappear";
-                document.getElementById("settings").style.animationDuration = "0.3s";
-                //这里要等动画搞完再设置关于框的显示属性
-                setTimeout('document.getElementById("settings").style.display="none";document.getElementById("body").style.pointerEvents="auto";', 280);
-            }
-            else {
-                document.getElementById("settings").style.display = "none";
-                document.getElementById("body").style.pointerEvents = "auto";
-            }
-        }
-
-
         function about_out() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://rastart.top/about.html", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById("about_history").innerHTML=xhr.response;
+                }
+                else{
+                    return "error";
+                }
+            }
+            xhr.send();
             document.getElementById("about_box").style.display = "inline";
-            //光标设置
-            document.getElementById("body").style.pointerEvents = "none";
-            document.getElementById("about_box").style.pointerEvents = "auto";
+            document.getElementById("cover_about").style.display = "inline";
             //动画
-            if (localStorage.getItem('motion') == 'false') {
+            if (get_settings("motion") == true) {
                 document.getElementById("about_box").style.animationName = "about_appear";
                 document.getElementById("about_box").style.animationDuration = "0.3s";
             }
+            else if (get_settings("motion") == false) {
+                document.getElementById("about_box").style.animationName = "";
+            }
+            document.body.setAttribute("onkeydown", "");
+            setTimeout('document.getElementById("cover_about").style.backgroundColor = "rgba(0,0,0,0.3)";document.getElementById("cover_about").style.backdropFilter = "blur(5px)";', 5);
+        }
+
+        function about_close() {
+            document.getElementById("cover_about").style.backgroundColor = "rgba(0,0,0,0)";
+            document.getElementById("cover_about").style.backdropFilter = "blur(0px)";
+            //动画
+            if (get_settings("motion") == true) {
+                document.getElementById("about_box").style.animationName = "about_disappear";
+                document.getElementById("about_box").style.animationDuration = "0.3s"
+                //这里要等动画搞完再设置关于框的显示属性
+                setTimeout('document.getElementById("about_box").style.display="none";', 280);
+            }
+            else {
+                document.getElementById("about_box").style.display = "none";
+            }
+            document.body.setAttribute("onkeydown", "if(event.keyCode==13) {search_focus() } if(event.keyCode==27) search_blur()");
+            setTimeout('document.getElementById("cover_about").style.display = "none";', 300);
         }
 
         function settings_out() {
             load_settings();
             load_img();
             document.getElementById("settings").style.display = "inline";
+            document.getElementById("cover_settings").style.display = "inline";
             //光标设置
-            document.getElementById("body").style.pointerEvents = "none";
-            document.getElementById("settings").style.pointerEvents = "auto";
             //动画
-            if (localStorage.getItem('motion') == 'false') {
+            if (get_settings("motion") == true) {
                 document.getElementById("settings").style.animationName = "settings_appear";
                 document.getElementById("settings").style.animationDuration = "0.3s";
+                //setTimeout('document.getElementById("settings").style.animationName = "";',300);
             }
-            else if (localStorage.getItem('motion') == 'true') {
+            else if (get_settings("motion") == false) {
                 document.getElementById("settings").style.animationName = "";
             }
+            document.body.setAttribute("onkeydown", "");
+            setTimeout('document.getElementById("cover_settings").style.backgroundColor = "rgba(0,0,0,0.3)";document.getElementById("cover_settings").style.backdropFilter = "blur(5px)";', 5);
+        }
 
+        function settings_close() {
+            document.getElementById("cover_settings").style.backgroundColor = "rgba(0,0,0,0)";
+            document.getElementById("cover_settings").style.backdropFilter = "blur(0px)";
+            if (get_settings("motion") == true) {
+                document.getElementById("settings").style.animationName = "settings_disappear";
+                document.getElementById("settings").style.animationDuration = "0.3s";
+                //这里要等动画搞完再设置关于框的显示属性
+                setTimeout('document.getElementById("settings").style.display="none";', 280);
+            }
+            else {
+                document.getElementById("settings").style.display = "none";
+            }
+            document.body.setAttribute("onkeydown", "if(event.keyCode==13) {search_focus() } if(event.keyCode==27) search_blur()");
+            setTimeout('document.getElementById("cover_settings").style.display = "none";', 300);
         }
 
         function load_img() {
@@ -166,7 +190,8 @@
         }
 
         function search_big() {
-            if (localStorage.getItem('motion') == 'false') {
+            document.getElementById("search").setAttribute("focus", "true");
+            if (get_settings("motion") == true) {
                 //动画
                 document.getElementById("main").style.animationName = "bg_big";
                 document.getElementById("main").style.animationDuration = "0.3s";
@@ -178,25 +203,26 @@
             document.getElementById('hitokoto_text').style.animationName = "hitokoto_appear";
             document.getElementById('hitokoto_text').style.animationDuration = "0.3s";
             document.getElementById('hitokoto_text').style.opacity = "1";
-            document.getElementById("search").style.width = "700px";
         }
 
         function search_small() {
-            if (localStorage.getItem('motion') == 'false') {
-                //动画
-                document.getElementById("main").style.animationName = "bg_small";
-                document.getElementById("main").style.animationDuration = "0.3s";
-                //固定设置
-                document.getElementById("main").style.transform = "scale(1)";
-                document.getElementById("main").style.filter = "blur(0px)";
+            if (document.getElementById("search").getAttribute("focus") != null) {
+                document.getElementById("search").removeAttribute("focus");
+                if (get_settings("motion") == true) {
+                    //动画
+                    document.getElementById("main").style.animationName = "bg_small";
+                    document.getElementById("main").style.animationDuration = "0.3s";
+                    //固定设置
+                    document.getElementById("main").style.transform = "scale(1)";
+                    document.getElementById("main").style.filter = "blur(0px)";
+                }
+                document.getElementById('hitokoto_text').style.animationName = "hitokoto_disappear";
+                document.getElementById('hitokoto_text').style.animationDuration = "0.3s";
+                document.getElementById('hitokoto_text').style.opacity = "0";
+                document.getElementById("suggestions").style.opacity = "0";
+                document.getElementById("search").value = "";
+                drop_disappear();
             }
-            document.getElementById('hitokoto_text').style.animationName = "hitokoto_disappear";
-            document.getElementById('hitokoto_text').style.animationDuration = "0.3s";
-            document.getElementById('hitokoto_text').style.opacity = "0";
-            document.getElementById("suggestions").style.opacity = "0";
-            document.getElementById("search").style.width = "450px";
-            document.getElementById("search").value = "";
-            drop_disappear();
         }
 
         function search_blur() {
@@ -227,11 +253,10 @@
             load_engine();
         }
 
-
         function load_wallpaper() {
             //启动时加载上一次的壁纸
             if (localStorage.getItem('pic') == null) {
-                localStorage.setItem('pic', 'https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg');
+                localStorage.setItem('pic', 'https://rastart.top/wallp/wp1.jpg');
             }
             var url = localStorage.getItem('pic');
             document.getElementById("wallpaper_link").value = url;
@@ -255,157 +280,13 @@
             var engine = localStorage.getItem('engine');
             document.getElementById("engine_txt").innerHTML = search_cn[engine];
         }
-        function wiki(text) {
-            if (text.indexOf('什么是') == 0) {
-                var word = text.replace("什么是", "");
-                var result_sug = document.createElement('div');
-                result_sug.setAttribute("class", "suggestion");
-                result_sug.textContent = "在百度百科中搜索:" + word;
-                result_sug.setAttribute("onclick", "link('https://baike.baidu.com/search?word=" + word + "&pn=0&rn=0&enc=utf8')")
-                document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-            }
-        }
-        function smart_sug(text) {
-
-            if (text.indexOf('翻译') == 0) {
-                if (text.indexOf(' ') != -1) {
-                    var splited_text = text.split(" ");
-                    splited_text.clean('');
-                    splited_text.push(['']);
-                    console.debug(splited_text);
-                    if (splited_text.length >= 3) {
-                        var plain_txt = splited_text[1];
-                        var target_lang = splited_text[2];
-                        if (splited_text[2] == "") {
-                            var result_sug = document.createElement('div');
-                            result_sug.setAttribute("class", "suggestion");
-                            var word_display = plain_txt;
-                            if (plain_txt.length >= 40)
-                                word_display = plain_txt.substr(0, 37) + "...";
-                            result_sug.textContent = "翻译" + word_display;
-                            result_sug.setAttribute("onclick", "link('https://translate.google.cn/?sl=auto&tl=zh-CN&text=" + plain_txt + "&op=translate')")
-                            document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-                        }
-                        if (lang_dic[target_lang] != null) {
-                            var result_sug = document.createElement('div');
-                            result_sug.setAttribute("class", "suggestion");
-                            var word_display = plain_txt;
-                            if (plain_txt.length >= 40)
-                                word_display = plain_txt.substr(0, 37) + "...";
-                            result_sug.textContent = "将" + word_display + "翻译为" + target_lang;
-                            result_sug.setAttribute("onclick", "link('https://translate.google.cn/?sl=auto&tl=" + lang_dic[target_lang] + "&text=" + plain_txt + "&op=translate')")
-                            document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-                        }
-                    }
-                }
-            }
-            else {
-                for (var i = 0; i < support_lang.length; i++) {
-                    if (text.indexOf(support_lang[i]) != -1) {
-                        var word = text.replace(support_lang[i], "");
-                        word = word.replace("的", "");
-                        var result_sug = document.createElement('div');
-                        result_sug.setAttribute("class", "suggestion");
-                        result_sug.textContent = "将" + word + "翻译为" + support_lang[i];
-                        result_sug.setAttribute("onclick", "link('https://translate.google.cn/?sl=auto&tl=" + lang_dic[support_lang[i]] + "&text=" + word + "&op=translate')")
-                        document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-                        break;
-                    }
-                }
-            }
-
-            if (text.indexOf('.') != -1) {
-                var result_sug = document.createElement('div');
-                result_sug.setAttribute("class", "suggestion");
-                var word_display = text;
-                text = text.replace("http://", "");
-                text = text.replace("https://", "");
-                if (text.length >= 60)
-                    word_display = text.substr(0, 59) + "...";
-                result_sug.textContent = "访问:" + word_display;
-                result_sug.setAttribute("onclick", "link('http://" + text + "')")
-                document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-            }
-
-            //普通的空格分隔
-            if (text.indexOf(' ') != -1) {
-                var splited_text = text.split(" ");
-                splited_text.clean('');
-                splited_text.clean('in');
-                splited_text.clean('to');
-                if (splited_text.length >= 3) {
-                    //长度单位判断
-                    if (length_unit.hasOwnProperty(splited_text[1]) && length_unit.hasOwnProperty(splited_text[2])) {
-                        var result = "" + parseFloat((splited_text[0] * length_unit[splited_text[1]] / length_unit[splited_text[2]]).toFixed(8));
-                        result = result.replace("NaN", "错误");
-                        var result_sug = document.createElement('div');
-                        result_sug.setAttribute("class", "suggestion");
-                        result_sug.textContent = result;
-                        document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-                    }
-                    else if (data_unit.hasOwnProperty(splited_text[1]) && data_unit.hasOwnProperty(splited_text[2])) {
-                        var result = "" + parseFloat((splited_text[0] * data_unit[splited_text[1]] / data_unit[splited_text[2]]).toFixed(8));
-                        result = result.replace("NaN", "错误");
-                        var result_sug = document.createElement('div');
-                        result_sug.setAttribute("class", "suggestion");
-                        result_sug.textContent = result;
-                        document.getElementById("suggestions").insertBefore(result_sug, document.getElementById("suggestions").children[0]);
-                    }
-                }
-            }
-        }
-
-        function clear_sug() {
-            document.getElementById("suggestions").style.height="0px";
-            for (var i = 0; i < 10; i++) {
-                var sg = document.getElementById('sug_box').children[i];
-                sg.remove();
-            }
-        }
-        function one_search() {
-            clear_sug();
-            keyword = document.getElementById("search").value;
-            if (keyword.length == 0){
-                clear_sug();
-            }
-            else{
-                document.getElementById("suggestions").style.opacity="1";
-            }
-            //smart_sug(keyword);
-            //搜索联想核心部分，将结果传给suggestion函数
-            oScript = document.createElement('script');
-            oScript.src = "http://suggestion.baidu.com/su?wd=" + keyword + "&cb=suggestion";
-            document.body.appendChild(oScript);
-            document.body.removeChild(oScript);
-        }
-        function suggestion(data) {
-            clear_sug();
-            if(document.getElementById("search").value.length){
-                document.getElementById("suggestions").style.height=data.s.length*30+"px";
-                for (var i = 0; i < Math.max(10, data.s.length); i++) {
-                    var new_sg = document.createElement("div");
-                    new_sg.textContent = data.s[i];
-                    new_sg.setAttribute("onclick", "search('" + data.s[i] + "')");
-                    new_sg.setAttribute("class","suggestion")
-                    document.getElementById('sug_box').appendChild(new_sg);
-                }
-            }
-        }
-        function HttpGet(theUrl) {
-            var xmlHttp = null;
-            xmlHttp = new XMLHttpRequest();
-            xmlHttp.withCredentials = true;
-            xmlHttp.open("get", theUrl, true);
-            xmlHttp.send(null);
-            return xmlHttp.responseText;
-        }
 
         function load_blur() {
-            element_list = ["about_box", "settings", "search_engine", "link1", "link2", "link3", "engine_txt", "search"];
-            blur_percent_list = ["0.93", "0.93", "0.7", "0.4", "0.5", "0.5", "0.5", "0.3"];
-            blur_original_list = ["0.7", "0.7", "0.3", "0.3", "0.3", "0.3", "0.3", "0.3"]
+            element_list = ["search_engine", "engine_txt", "search", "about_btn"];
+            blur_percent_list = ["0.7", "0.5", "0.45", "0.4"];
+            blur_original_list = ["0.3", "0.3", "0.3", "0.15"]
             for (var i = 0; i < element_list.length; i++) {
-                if (localStorage.getItem('blur') == 'true') {
+                if (get_settings("blur") == true) {
                     document.getElementById(element_list[i]).style.backdropFilter = "blur(5px)";
                     document.getElementById(element_list[i]).style.backgroundColor = "rgba(255, 255, 255, " + blur_original_list[i] + ")";
                 }
@@ -424,7 +305,17 @@
             load_settings();
             load_blur();
             document.getElementById("hitokoto").style.display = "none";
-            search_blur();
+            //search_blur();
+            document.getElementById("about_history").onscroll = (event) => {
+                if (document.getElementById("about_history").scrollTop > 0) {
+                    document.getElementById("about_lock").style.height = "80px";
+                    document.getElementById("about_history").style.height = "calc(100% - 100px)";
+                }
+                else {
+                    document.getElementById("about_lock").style.height = "170px";
+                    document.getElementById("about_history").style.height = "calc(100% - 190px)";
+                }
+            };
         }
 
         function bg_change() {
@@ -443,15 +334,6 @@
 
 
     <title>红苹果起始页</title>
-    <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?07ce23e4421e8f1801ac8f9c08cf9352";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
     <style>
         .video {
             position: fixed;
@@ -477,28 +359,14 @@
         <source  src="1.mp4">
     </video> -->
 
+    <script src="./js/onesearch.js"></script>
 
     <!-- 顶部时间 -->
     <a onclick="link('http\://time.is')">
         <div id="divBottom" class="time"></div>
     </a>
 
-    <script>
-        date()
-        //获取当天日期
-        function date() {
-            var date = new Date();
-            var hour = "00" + date.getHours();
-            hour = hour.substr(hour.length - 2);
-            var minute = "00" + date.getMinutes();
-            minute = minute.substr(minute.length - 2);
-            var second = "00" + date.getSeconds();
-            second = second.substr(second.length - 2);
-
-            document.getElementById("divBottom").innerHTML = hour + ":" + minute + ":" + second;
-        }
-        setInterval("date()", 1000);
-    </script>
+    <script src="./js/time_sync.js" type="text/javascript"></script>
 
     <!-- 搜索引擎 -->
     <div class="dropdown">
@@ -514,166 +382,117 @@
         </div>
     </div>
 
+    <script src="https://www.itxst.com/package/clipboardjs/clipboard.min.js"></script>
 
     <!-- 搜索框 -->
     <input onclick="search_big()" class="search" type="text" name="search" id="search" placeholder="搜索"
-        oninput="one_search()" onkeydown="if(event.keyCode==13) search(document.getElementById('search').value);">
+        onkeyup="one_search()" onkeydown="if(event.keyCode==13) search(document.getElementById('search').value);"
+        autocomplete="off">
 
     <!-- 搜索联想 -->
-    <div class="suggestions" id="suggestions" style="opacity: 0;">
+    <div class="suggestions" id="suggestions" style="opacity: 0;height: auto;">
         <div id="smart_sug_box">
 
         </div>
         <div id="sug_box">
-
-        </div>
-    </div>
-
-    <!-- 三个快捷链接 -->
-    <div class="quick_btn" id="quick">
-        <div class="bilibili" id="link1">
-            <a onclick="link('https\://www.bilibili.com')">B站</a>
-        </div>
-
-        <div class="mail" id="link2">
-            <a onclick="link('https\://mail.163.com')">邮箱</a>
-        </div>
-
-        <div class="music" id="link3">
-            <a onclick="link('https\://music.163.com/')">音乐</a>
         </div>
     </div>
 
 
-    <!--关于-->
-    <div class="about" id="about_box">
-        <div class="about_lock">
-            <div style="height: 80px;"><img src="./Applestart.png" style="height: 80px;"></div>
-            <p>By<a id="link" href="https://space.bilibili.com/600004959">极客果GeekApple</a></p>
-            <p><a id="link" href="more_info.html">更多信息</a></p>
-        </div>
-        <p onclick="about_close()" class="close">×</p>
-        <div class="about_history" onscroll="move">
-            <p class="version">22w23a 22.06.11</p>
-            <div class="version_txt">
-                <p>加入搜索词联想功能.</p>
+    <div id="cover_about" style="backdrop-filter: blur(5px);background-color:rgba(0, 0, 0, 0);transition: 300ms;height: 100%;width: 100%;overflow: hidden;position: absolute;top: 0;left: 0;z-index: 10;display: none;">
+        <!--关于-->
+        <div class="about" id="about_box">
+            <div id="about_lock" class="about_lock">
+                <div style="height: 80px;"><img src="./Applestart.png" style="height: 80px;"></div>
+                <br>
+                <span>这里是王子文制作的起始页( •̀ ω •́ )</span>
+                <br><br>
+                <a id="link" href="https://space.bilibili.com/600004959">访问我的哔哩哔哩主页</a>
+                <br><br>
+                <span>为我<a id="link" href="https://afdian.net/@AppleStart">捐助</a>，支持我的开发</span>
+                <br><br>
+                <span><a id="link" href="more_info.html">更多信息</a></span>
             </div>
-            <p class="version">22w22a 22.05.30</p>
-            <div class="version_txt">
-                <p>紧急更新:修复必应每日一图api无法使用的问题</p>
+            <p onclick="about_close()" class="close">×</p>
+            <div id="about_history" class="about_history">
+                
             </div>
-            <p class="version">22w19b 22.05.15</p>
-            <div class="version_txt">
-                <p>爆改css,将所有css合并入一个文件,且适配不同屏幕宽度而非按比例缩放</p>
-                <p>删除css冗余代码</p>
-                <p>删除js与css的冲突与冗余代码</p>
-                <p>删除不必要的log</p>
-                <p>修复在低分辨率设备上,设置界面动画的错误对齐</p>
-            </div>
-            <p class="version">22w19a 22.05.09</p>
-            <div class="version_txt">
-                <p>设置界面中,元素背景模糊会提示火狐浏览器不支持.(如未来浏览器支持,会删除相关代码)</p>
-                <p>优化了滚动条隐藏的代码.</p>
-                <p>更改css为外部引入,减少主文件代码冗余</p>
-                <p>部分元素透明度调整.</p>
-            </div>
-            <p class="version">22w17a 22.05.01</p>
-            <div class="version_txt">
-                <p>添加设置界面</p>
-                <p>动画调整</p>
-                <p>背景选择整合进设置界面</p>
-                <p>设置界面支持直接点击图片选择背景</p>
-                <p>关于界面UI调整</p>
-                <p>删除冗余代码</p>
-                <p>修复一些Bug</p>
-                <p>关于界面文本小幅调整</p>
-                <p>关于和设置界面支持滚动,没有滚动条</p>
-                <p>电脑端主界面按回车自动聚焦,Esc返回初始状态.</p>
-                <p>优化图片加载逻辑,大幅度缩短了页面加载时间.</p>
-                <p>设置界面支持滚动,无滚动条</p>
-                <p>添加元素背景模糊设置</p>
-                <p>搜索框聚焦时显示一言,可以在设置中选择是否开启.</p>
-            </div>
-            <p class="version">22w11a 22.03.19</p>
-            <p class="version_txt">添加新的UI和动画,对移动端做了适配,加入搜索引擎记忆功能并修复若干bug.</p>
-            <p class="version">22w09b 22.03.06</p>
-            <p class="version_txt">正式上线,背景选择从离线图片变为在线链接,能更好更换.</p>
-            <p class="version">22w09a 22.03.05</p>
-            <p class="version_txt">起始页制作完成</p>
         </div>
     </div>
 
-    <a class="about_btn" onclick="about_out()">
-        关于
-    </a>
+    <div id="about_btn" class="about_btn">
+        <a onclick="about_out()">关于</a>
+    </div>
 
     <!--设置-->
-
-    <div class="settings" id="settings">
-        <div class="settings_lock">
-            <p onclick="settings_close()" class="close">×</p>
-            <div class="settings_title">
-                <p>设置</p>
+    <div id="cover_settings" style="backdrop-filter: blur(5px);background-color:rgba(0, 0, 0, 0);transition: 300ms;height: 100%;width: 100%;overflow: hidden;position: absolute;top: 0;left: 0;z-index: 10;display: none;">
+        <div class="settings" id="settings">
+            <div class="settings_lock">
+                <p onclick="settings_close()" class="close">×</p>
+                <div class="settings_title">
+                    <p>设置</p>
+                </div>
+            </div>
+            <div id="settings_txt" class="settings_txt">
+                <div>
+                    开启天气
+                    <input type="checkbox" name="weather" class="setting_switch">
+                </div>
+                <p>开启天气</p>
+                <p>动态效果</p>
+                <p>元素背景模糊(不包括壁纸)</p>
+                <p>搜索框聚焦时显示"一言"</p>
+                <p>壁纸</p>
+                <p>
+                    <input type="text" class="wallpaper_link" name="wallpaper" placeholder="输入链接" id="wallpaper_link">
+                    <input type="button" name="wallpaper_btn" onclick="bg_change()" value="应用" class="wallpaper_apply">
+                </p>
+                <div id="default_bg" class="default_img">
+                    <img _src="https://rastart.top/today_bing.bmp" src="" class="settings_img"
+                        onclick='set_wallpaper_link("https\://rastart.top/today_bing.bmp")'>
+                    <img _src="https://rastart.top/wallp/wp1.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp1.jpg')" id="bing_wallpaper">
+                    <img _src="https://rastart.top/wallp/wp2.jpg" src="" class="settings_img"
+                        onclick='set_wallpaper_link("https\://rastart.top/wallp/wp2.jpg")'>
+                    <img _src="https://rastart.top/wallp/wp3.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp3.jpg')">
+                    <img _src="https://rastart.top/wallp/wp4.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp4.jpg')">
+                    <img _src="https://rastart.top/wallp/wp5.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp5.jpg')">
+                    <img _src="https://rastart.top/wallp/wp6.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp6.jpg')">
+                    <!--哎呀,居然被你发现了!既然被你发现了,那么……我是云堇单推人!(大声)-->
+                    <img _src="https://rastart.top/wallp/wp7.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp7.jpg')">
+                    <img _src="https://rastart.top/wallp/wp8.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('http\://rastart.top/wallp/wp8.jpg')">
+                    <img _src="https://rastart.top/wallp/wp9.jpg" src="" class="settings_img"
+                        onclick="set_wallpaper_link('https\://rastart.top/wallp/wp9.jpg')">
+                </div>
+                <div class="settings_check">
+                    <form method="post" id="settings_check_box">
+                        <br>
+                        <p>
+                            <input type="checkbox" name="weather" onclick="save_settings()">
+                        </p>
+                        <p>
+                            <input type="checkbox" name="motion" onclick="save_settings()">
+                        </p>
+                        <p>
+                            <input type="checkbox" name="blur" onclick="save_settings()">
+                        </p>
+                        <p>
+                            <input type="checkbox" name="hitokoto" onclick="save_settings()">
+                        </p>
+                        <p>
+                            <input type="checkbox" name="time_sync" onclick="save_settings()">
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
-        <div id="settings_txt" class="settings_txt">
-            <p>开启天气</p>
-            <p>减弱动态效果</p>
-            <p>元素背景模糊(不包括壁纸)</p>
-            <p>搜索框聚焦时显示"一言"</p>
-            <p>壁纸</p>
-            <p>
-                <input type="text" class="wallpaper_link" name="wallpaper" placeholder="输入链接" id="wallpaper_link">
-                <input type="button" name="wallpaper_btn" onclick="bg_change()" value="应用" class="wallpaper_apply">
-            </p>
-            <div id="default_bg" class="default_img">
-                <img _src="https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg"
-                    src="" class="settings_img"
-                    onclick='set_wallpaper_link("https\://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg")'>
-                <img _src="./php/get_bing.php" src="" class="settings_img"
-                    onclick="set_wallpaper_link('./php/get_bing.php')" id="bing_wallpaper">
-                <img _src="https://tse1-mm.cn.bing.net/th/id/R-C.540d245ebd32a1aa6ce7002e273e382f?rik=%2bhtc3EVf7CK1BA&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2ff22e65b0321638e09c5c7b8ef5f89b5ccf0ab506.jpg&ehk=iKjCDUjRjbxqRdAofcb%2f6dvV%2fawqpnvQ2UclamsMv8I%3d&risl=&pid=ImgRaw&r=0"
-                    src="" class="settings_img"
-                    onclick='set_wallpaper_link("https\://tse1-mm.cn.bing.net/th/id/R-C.540d245ebd32a1aa6ce7002e273e382f?rik=%2bhtc3EVf7CK1BA&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2ff22e65b0321638e09c5c7b8ef5f89b5ccf0ab506.jpg&ehk=iKjCDUjRjbxqRdAofcb%2f6dvV%2fawqpnvQ2UclamsMv8I%3d&risl=&pid=ImgRaw&r=0")'>
-                <img _src="https://pic3.zhimg.com/v2-0087e364e1f120dfd9896d7331809793_r.jpg?source=1940ef5c" src=""
-                    class="settings_img"
-                    onclick="set_wallpaper_link('https\://pic3.zhimg.com/v2-0087e364e1f120dfd9896d7331809793_r.jpg?source=1940ef5c')">
-                <img _src="https://images5.alphacoders.com/106/thumb-1920-1069099.png" src="" class="settings_img"
-                    onclick="set_wallpaper_link('https\://images5.alphacoders.com/106/thumb-1920-1069099.png')">
-                <img _src="https://pic3.zhimg.com/v2-b584e76f364fd17d59b39513e5f9fee7_r.jpg?source=12a79843" src=""
-                    class="settings_img"
-                    onclick="set_wallpaper_link('https\://pic3.zhimg.com/v2-b584e76f364fd17d59b39513e5f9fee7_r.jpg?source=12a79843')">
-                <img _src="https://tse1-mm.cn.bing.net/th/id/R-C.0889c0dae2d82c085ceeaeead79a3349?rik=1y8tHj2PEpIwmw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f41dd8698ebb97c2863708321b17921965019f158.jpg&ehk=QAJi%2bcstg%2fGPQEJF%2bUBnuSkpVXztt04bmRQCWiV7rEo%3d&risl=&pid=ImgRaw&r=0"
-                    src="" class="settings_img"
-                    onclick="set_wallpaper_link('https\://tse1-mm.cn.bing.net/th/id/R-C.0889c0dae2d82c085ceeaeead79a3349?rik=1y8tHj2PEpIwmw&riu=http%3a%2f%2fi2.hdslb.com%2fbfs%2farchive%2f41dd8698ebb97c2863708321b17921965019f158.jpg&ehk=QAJi%2bcstg%2fGPQEJF%2bUBnuSkpVXztt04bmRQCWiV7rEo%3d&risl=&pid=ImgRaw&r=0')">
-                <!--哎呀,居然被你发现了!既然被你发现了,那么……我是云堇单推人!(大声)-->
-                <img _src="https://pic.3gbizhi.com/2020/0910/20200910081911645.jpeg" src="" class="settings_img"
-                    onclick="set_wallpaper_link('https\://pic.3gbizhi.com/2020/0910/20200910081911645.jpeg')">
-                <img _src="https://p.qpic.cn/dnfbbspic/0/dnfbbs_dnfbbs_dnf_gamebbs_qq_com_forum_202002_20_095552u250ohonivxm0tmj.jpg/0"
-                    src="" class="settings_img"
-                    onclick="set_wallpaper_link('https\://p.qpic.cn/dnfbbspic/0/dnfbbs_dnfbbs_dnf_gamebbs_qq_com_forum_202002_20_095552u250ohonivxm0tmj.jpg/0')">
-                <img _src="https://pica.zhimg.com/v2-b4c6be038b68bdea35bf071bb4bf6988_r.jpg?source=1940ef5c" src=""
-                    class="settings_img"
-                    onclick="set_wallpaper_link('https\://pica.zhimg.com/v2-b4c6be038b68bdea35bf071bb4bf6988_r.jpg?source=1940ef5c')">
-            </div>
-            <div class="settings_check">
-                <form method="post" id="settings_check_box">
-                    <p>
-                        <input type="checkbox" name="weather" onclick="save_settings()">
-                    </p>
-                    <p>
-                        <input type="checkbox" name="motion" onclick="save_settings()">
-                    </p>
-                    <p>
-                        <input type="checkbox" name="blur" onclick="save_settings()">
-                    </p>
-                    <p>
-                        <input type="checkbox" name="hitokoto" onclick="save_settings()">
-                    </p>
-                </form>
-            </div>
-        </div>
-    </div>
+    </div> 
 
     <a class="settings_btn" onclick="settings_out()">
         <i class="iconfont icon-shezhi"></i>
@@ -688,7 +507,7 @@
         fetch('https://v1.hitokoto.cn')
             .then(response => response.json())
             .then(data => {
-                const hitokoto = document.getElementById('hitokoto_text')
+                const hitokoto = document.getElementById('hitokoto_text');
                 hitokoto.href = 'https://hitokoto.cn/?uuid=' + data.uuid
                 hitokoto.innerText = data.hitokoto
                 if (data.from_who != null)
@@ -704,37 +523,11 @@
     <!-- 下面是和风天气插件,最好放在最后,否则影响网页加载速度. -->
     <div id="he-plugin-simple"></div>
     <script>
-        WIDGET = {
-            "CONFIG": {
-                "modules": "20",
-                "background": "5",
-                "backgroundColor": "AAAAAA",
-                "tmpColor": "FFFFFF",
-                "tmpSize": "16",
-                "cityColor": "FFFFFF",
-                "citySize": "16",
-                "aqiColor": "FFFFFF",
-                "aqiSize": "16",
-                "weatherIconSize": "24",
-                "alertIconSize": "18",
-                "padding": "0px 0px 0px 0px",
-                "shadow": "0",
-                "language": "zh",
-                "borderRadius": "20",
-                "fixed": "true",
-                "vertical": "top",
-                "horizontal": "left",
-                "left": "10",
-                "bottom": "13",
-                "key": "2882a3b8d30c4db2bb8cef54dece815e"
-            }
-        }
+        WIDGET = {"CONFIG": {"modules": "20","background": "5","backgroundColor": "AAAAAA","tmpColor": "FFFFFF","tmpSize": "16","cityColor": "FFFFFF","citySize": "16","aqiColor": "FFFFFF","aqiSize": "16","weatherIconSize": "24","alertIconSize": "18","padding": "0px 0px 0px 0px","shadow": "0","language": "zh","borderRadius": "20","fixed": "true","vertical": "top","horizontal": "left","left": "10","bottom": "13","key": "7421f594973e4806b57c86cf9aca0684"}}
     </script>
-    <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
+    <script id="weather"></script>
 
-    <script type="text/javascript" src="./php/me.php"></script>
     <script>
-        console.log("此网站已被访问" + web_times + "次");
         var new_date = new Date(); //新建一个日期对象，默认现在的时间
         var old_date = new Date("2022-03-05 16:38:00");//网站创建时间
         var past = new_date - old_date;

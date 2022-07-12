@@ -3,10 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
-    <meta name="description" content="红苹果起始页">
-    <meta name="author"content="一个简单的浏览器主页，让您的起始页更加简洁，美观，实用">
-    <link rel="stylesheet" href="./src/iconfont.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/iconfont.css">
     <link rel=" icon" href="Apple.webp">
     <link rel="icon" href="Apple.webp" type="image/x-ico">
     <script>
@@ -28,8 +26,12 @@
             }
             var url = localStorage.getItem('pic');
             document.getElementById("wallpaper_link").value = url;
+            //由于firefox不支持backdrop-filter,因此将其设为不可用状态.
             if (navigator.userAgent.indexOf('Firefox') >= 0) {
-                document.getElementById("settings_txt").children[2].innerHTML = "元素背景模糊(Firefox需要手动开启,<a href='https://blog.rastart.top/#/ziwen/Firefox_backdrop'>教程</a>)";
+                localStorage.setItem("blur", "false");
+                document.getElementById("settings_check_box")[2].setAttribute("disabled", "true");
+                document.getElementById("settings_check_box")[2].checked = false;
+                document.getElementById("settings_txt").children[2].innerHTML = "Element backdrop blur(Firefox doesn't support)";
             }
         }
 
@@ -228,7 +230,7 @@
         }
 
         function load_engine() {
-            search_cn = { 'baidu': '百度', 'bing': '必应', 'google': '谷歌', 'trans': '翻译', 'ecosia': 'Ecosia' }
+            search_cn = { 'baidu': 'Baidu', 'bing': 'Bing', 'google': 'Google', 'trans': 'Trans', 'ecosia': 'Ecosia' }
             if (localStorage.getItem('engine') == null) {
                 localStorage.setItem('engine', 'bing');
             }
@@ -271,7 +273,7 @@
             var url = document.getElementById('wallpaper_link').value;
             var reg = /[a-zA-z]+:\/\/[^\s]*/g;
             if (url == "") {
-                url = "https://rastart.top/wallp/wp1.jpg";
+                url = "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg";
             }
             localStorage.setItem('pic', url);
             document.getElementById("main").setAttribute('src', url);
@@ -279,19 +281,10 @@
         }
 
     </script>
-    <link rel="stylesheet" href="style/22w21a.css">
+    <link rel="stylesheet" href="./style/22w21a.css">
 
 
-    <title>红苹果起始页</title>
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?07ce23e4421e8f1801ac8f9c08cf9352";
-        var s = document.getElementsByTagName("script")[0]; 
-        s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
+    <title>RAStart</title>
 </head>
 
 
@@ -331,31 +324,31 @@
             onclick="if(document.getElementById('engine_txt').getAttribute('appear')=='true'){drop_disappear()}else{drop_appear()}"
             onblur="drop_disappear()"></button>
         <div class="dropdown-menu" id="search_engine" onclick="drop_disappear()">
-            <a value="baidu" onclick="engine_change('baidu')">百度</a>
-            <a value="bing" onclick="engine_change('bing')">必应</a>
-            <a value="google" onclick="engine_change('google')">谷歌</a>
-            <a value="trans" onclick="engine_change('trans')">翻译</a>
+            <a value="baidu" onclick="engine_change('baidu')">Baidu</a>
+            <a value="bing" onclick="engine_change('bing')">Bing</a>
+            <a value="google" onclick="engine_change('google')">Google</a>
+            <a value="trans" onclick="engine_change('trans')">Trans</a>
             <a value="ecosia" onclick="engine_change('ecosia')">Ecosia</a>
         </div>
     </div>
 
 
-    <input onclick="search_big()" class="user-input" type="text" name="search" id="search" placeholder="搜索"
+    <input onclick="search_big()" class="user-input" type="text" name="search" id="search" placeholder="Search"
         onkeydown="if(event.keyCode==13) search();">
 
 
     <!-- 三个快捷链接 -->
     <div class="quick_btn" id="quick">
         <div class="bilibili" id="link1">
-            <a onclick="link('https\://www.bilibili.com')">B站</a>
+            <a onclick="link('https\://www.youtube.com')">Youtube</a>
         </div>
 
         <div class="mail" id="link2">
-            <a onclick="link('https\://mail.163.com')">邮箱</a>
+            <a onclick="link('https\://mail.google.com')">Gmail</a>
         </div>
 
         <div class="music" id="link3">
-            <a onclick="link('https\://music.163.com/')">音乐</a>
+            <a onclick="link('https\://www.spotify.com')">Spotify</a>
         </div>
     </div>
 
@@ -363,64 +356,60 @@
     <!--关于-->
     <div class="about" id="about_box">
         <div class="about_lock">
-            <p>关于</p>
+            <p>About</p>
             <p>
                 By<a href="https://space.bilibili.com/600004959">极客果GeekApple</a>
             </p>
-
-            <p>注意:此网站已接入百度统计服务，便于开发者统计访问信息。</p>
-            <p>获取关于此网页的<a href="more_info.html">更多信息</a></p>
+            <p>Get<a href="more_info.html"> more informations </a>about this website.</p>
         </div>
         <p onclick="about_close()" class="close">×</p>
         <div class="cut_line"></div>
         <div class="about_history">
             <p class="version">22w22a 22.05.30</p>
             <div class="version_txt">
-                <p>紧急更新:修复必应每日一图api无法使用的问题</p>
+                <p>Fix the problem about Bing wallpaper's API</p>
             </div>
             <p class="version">22w19b 22.05.15</p>
             <div class="version_txt">
-                <p>爆改css,将所有css合并入一个文件,且适配不同屏幕宽度而非按比例缩放</p>
-                <p>删除css冗余代码</p>
-                <p>删除js与css的冲突与冗余代码</p>
-                <p>删除不必要的log</p>
-                <p>修复在低分辨率设备上,设置界面动画的错误对齐</p>
+                <p>Merged all css into one file, and adapted to different screen widths</p>
+                <p>Imporve code quality</p>
+                <p>Remove some logs</p>
+                <p>Fixed incorrect align of animation on low resolution devices</p>
             </div>
             <p class="version">22w19a 22.05.09</p>
             <div class="version_txt">
-                <p>设置界面中,元素背景模糊会提示火狐浏览器不支持.(如未来浏览器支持,会删除相关代码)</p>
-                <p>优化了滚动条隐藏的代码.</p>
-                <p>更改css为外部引入,减少主文件代码冗余</p>
-                <p>部分元素透明度调整.</p>
+                <p>Firefox users will see “the Firefox browser doesn't support” in the backdrop blur setting. (If the browser supports it in the future, it will be delete)</p>
+                <p>Imporve code quality</p>
+                <p>Chang opacity of some elements.</p>
             </div>
             <p class="version">22w17a 22.05.01</p>
             <div class="version_txt">
-                <p>添加设置界面</p>
-                <p>动画调整</p>
-                <p>背景选择整合进设置界面</p>
-                <p>设置界面支持直接点击图片选择背景</p>
-                <p>关于界面UI调整</p>
-                <p>删除冗余代码</p>
-                <p>修复一些Bug</p>
-                <p>关于界面文本小幅调整</p>
-                <p>关于和设置界面支持滚动,没有滚动条</p>
-                <p>电脑端主界面按回车自动聚焦,Esc返回初始状态.</p>
-                <p>优化图片加载逻辑,大幅度缩短了页面加载时间.</p>
-                <p>设置界面支持滚动,无滚动条</p>
-                <p>添加元素背景模糊设置</p>
-                <p>搜索框聚焦时显示一言,可以在设置中选择是否开启.</p>
+                <p>Add settings surface</p>
+                <p>Change animation</p>
+                <p>Background selection integrated into settings.</p>
+                <p>Support clicking on the picture to switch wallpaper.</p>
+                <p>Change UI</p>
+                <p>Imporve code quality</p>
+                <p>Fix Bugs</p>
+                <p>Change text</p>
+                <p>Remove scrollbar in About and Settings</p>
+                <p>Press Enter in the main interface to focus, and Esc returns to the initial state.</p>
+                <p>Optimize the image loading logic, greatly shorten the page loading time.</p>
+                <p>Add element backdrop blur</p>
+                <p>Display hitokoto when the searchbor focused</p>
+                <p>P.S: Hitokoto can give you a random sentence by each refresh, but many of them aren't English</p>
             </div>
             <p class="version">22w11a 22.03.19</p>
-            <p class="version_txt">添加新的UI和动画,对移动端做了适配,加入搜索引擎记忆功能并修复若干bug.</p>
+            <p class="version_txt">Added new animations, adapted mobile devices, added storage search engine and fixed bugs</p>
             <p class="version">22w09b 22.03.06</p>
-            <p class="version_txt">正式上线,背景选择从离线图片变为在线链接,能更好更换.</p>
+            <p class="version_txt">Officially launched, the background selection has changed from offline pictures to online links</p>
             <p class="version">22w09a 22.03.05</p>
-            <p class="version_txt">起始页制作完成</p>
+            <p class="version_txt">Completed basic code</p>
         </div>
     </div>
 
     <a class="about_btn" onclick="about_out()">
-        关于
+        About
     </a>
 
     <!--设置-->
@@ -429,15 +418,15 @@
         <div class="settings_lock">
             <p onclick="settings_close()" class="close">×</p>
             <div class="settings_title">
-                <p>设置</p>
+                <p>Settings</p>
             </div>
         </div>
         <div id="settings_txt" class="settings_txt">
-            <p>开启天气</p>
-            <p>减弱动态效果</p>
-            <p>元素背景模糊(不包括壁纸)</p>
-            <p>搜索框聚焦时显示"一言"</p>
-            <p>壁纸</p>
+            <p>Show weather</p>
+            <p>Reduce motion</p>
+            <p>Element backdrop blur(doesn't contain wallpaper)</p>
+            <p>Show Hitokoto when searchbar focused</p>
+            <p>Wallpaper</p>
             <p>
                 <input type="text" class="wallpaper_link" name="wallpaper" placeholder="输入链接" id="wallpaper_link">
                 <input type="button" name="wallpaper_btn" onclick="bg_change()" value="应用" class="wallpaper_apply">
@@ -525,15 +514,13 @@
                 "horizontal": "left",
                 "left": "10",
                 "bottom": "13",
-                "key": "7421f594973e4806b57c86cf9aca0684"
+                "key": "2882a3b8d30c4db2bb8cef54dece815e"
             }
         }
     </script>
     <script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script>
 
-    <script type="text/javascript" src="./php/out.php"></script>
     <script>
-        console.log("此网站已被访问" + web_times + "次");
         var new_date = new Date(); //新建一个日期对象，默认现在的时间
         var old_date = new Date("2022-03-05 16:38:00");//网站创建时间
         var past = new_date - old_date;

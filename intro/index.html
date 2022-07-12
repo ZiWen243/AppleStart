@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>红苹果起始页的Blog</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link id="class" rel="stylesheet" href="vue.css">
+</head>
+
+<body>
+    <div style="position: fixed;top: 20px;right: 20px;z-index: 5;cursor: pointer;">
+        <a onclick="dark()" id="dm_txt">深色模式</a>
+    </div>
+    <script>
+        function load_dark(){
+            if(localStorage.getItem("dm")==null)
+                localStorage.setItem("dm","light");
+            else if(localStorage.getItem("dm")=="dark"){
+                document.getElementById("class").href = "./css/dark.css";
+                document.getElementById("dm_txt").textContent="浅色模式";
+            }
+            else if(localStorage.getItem("dm")=="light"){
+                document.getElementById("class").href = "./css/vue.css";
+                document.getElementById("dm_txt").textContent="深色模式";
+            }
+        }
+        function dark() {
+            document.body.style.transition = "300ms";
+            document.getElementsByClassName("sidebar")[0].style.transition="300ms";
+            document.getElementsByClassName("sidebar-toggle")[0].style.transition="300ms";
+            document.getElementsByClassName("search")[0].style.transition="300ms";
+            if(localStorage.getItem("dm")==null)
+                localStorage.setItem("dm","light");
+            else if(localStorage.getItem("dm")=="light"){
+                document.getElementById("class").href = "./css/dark.css";
+                document.getElementById("dm_txt").textContent="浅色模式";
+                localStorage.setItem("dm","dark")
+            }
+            else if(localStorage.getItem("dm")=="dark"){
+                document.getElementById("class").href = "./css/vue.css";
+                document.getElementById("dm_txt").textContent="深色模式";
+                localStorage.setItem("dm","light")
+            }
+        }
+    </script>
+    <div id="app">加载中……</div>
+
+    <script>
+        window.$docsify = {
+            name: '红苹果起始页Blog',
+            repo: '',
+            loadSidebar: true,
+            subMaxLevel: 2,
+            coverpage: ['/'],
+            onlyCover: true,
+            // 完整配置参数
+            search: {
+                maxAge: 86400000, // 过期时间，单位毫秒，默认一天
+                paths: 'auto',
+                placeholder: '搜索',
+                noData: '没有记录！'
+            }
+        }
+    </script>
+    <script src="./js/search.min.js"></script>
+
+    <!-- Docsify v4 -->
+    <script src="./js/main.js"></script>
+    <script>load_dark();</script>
+</body>
+
+</html>

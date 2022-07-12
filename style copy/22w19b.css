@@ -126,8 +126,7 @@
     height: 100%;
     z-index: -10;
     object-fit: cover;
-    src: "https://rastart.top/wallp/wp1.jpg";
-    overflow: hidden;
+    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg";
 }
 
 
@@ -148,7 +147,7 @@
 }
 
 .about_history {
-    max-height: 100%;
+    max-height: 73%;
     overflow-y: auto;
     line-height: 1em;
     scrollbar-width: none;
@@ -171,7 +170,7 @@
 
 .about_lock {
     margin-top: 20px;
-    min-height: 100px;
+    min-height: 22%;
     line-height: 0.9em;
     overflow-y: unset;
 }
@@ -199,7 +198,7 @@
 }
 
 .settings_lock {
-    min-height: 100px; 
+    height: 5%;
     overflow: hidden;
 }
 
@@ -321,7 +320,7 @@
         position: absolute;
         top: 190px;
         left: 50%;
-        width: 450px;
+        width: 400px;
         height: 40px;
         border: 0px solid rgb(161, 161, 161);
         border-radius: 20px;
@@ -332,16 +331,16 @@
         text-indent: -5px;
         transform: translate(-50%, 0%);
         text-align: center;
-        transition: 300ms;
+        transition: 280ms;
     }
 
     .user-input:hover {
-        width: 700px;
+        width: 600px;
         background-color: rgba(182, 182, 182, .4);
     }
 
     .user-input:focus {
-        width: 700px;
+        width: 600px;
         background-color: rgba(32, 32, 32, .6);
     }
 
@@ -358,7 +357,7 @@
 
     .bilibili {
         position: absolute;
-        left: calc(50% - 150px);
+        left: 40%;
         width: 80px;
         height: 80px;
         text-align: center;
@@ -393,7 +392,7 @@
         overflow: hidden;
         line-height: 80px;
         position: absolute;
-        left: calc(50% + 150px);
+        left: 60%;
         width: 80px;
         height: 80px;
         text-align: center;
@@ -422,7 +421,7 @@
         left: 50%;
         bottom: 10%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
@@ -430,17 +429,16 @@
         transform: translate(-50%, 0%);
         text-align: center;
         overflow-y: hidden;
-        z-index: 1;
     }
 
     .settings {
         position: absolute;
         width: 600px;
         height: 70%;
-        left: calc(50% - 300px);
+        left: 32%;
         bottom: 15%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
@@ -448,7 +446,6 @@
         transform: translate(0%, 0%);
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
     }
 
     .dropdown {
@@ -476,7 +473,6 @@
         padding-left: 0.5em;
         padding-right: 0.5em;
         vertical-align: middle;
-        z-index: 0;
     }
 }
 
@@ -539,7 +535,7 @@
         left: 50%;
         bottom: 10%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
@@ -547,17 +543,16 @@
         transform: translate(-50%, 0%);
         text-align: center;
         overflow-y: hidden;
-        z-index: 1;
     }
 
     .settings {
         position: absolute;
         width: 500px;
         height: 70%;
-        left: calc(50% - 250px);
+        left: 32%;
         bottom: 15%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
@@ -565,7 +560,6 @@
         transform: translate(0%, 0%);
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
     }
 
     .dropdown {
@@ -593,7 +587,6 @@
         padding-left: 0.5em;
         padding-right: 0.5em;
         vertical-align: middle;
-        z-index: 0;
     }
 
     .bilibili {
@@ -646,13 +639,12 @@
 }
 
 @media screen and (max-width:600px){
-
     .user-input {
         margin-top: 10px;
         position: absolute;
         top: 190px;
         left: 50%;
-        width: 70%;
+        width: 340px;
         height: 40px;
         border: 0px solid rgb(161, 161, 161);
         border-radius: 20px;
@@ -667,12 +659,12 @@
     }
 
     .user-input:hover {
-        width: 90%;
+        width: 500px;
         background-color: rgba(182, 182, 182, .4);
     }
 
     .user-input:focus {
-        width: 90%;
+        width: 500px;
         background-color: rgba(32, 32, 32, .6);
     }
 
@@ -700,12 +692,12 @@
 
     .about {
         position: absolute;
-        width: 80%;
+        width: 500px;
         height: 80%;
         left: 50%;
-        bottom: 15%;
+        bottom: 10%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
@@ -713,24 +705,23 @@
         transform: translate(-50%, 0%);
         text-align: center;
         overflow-y: hidden;
-        z-index: 1;
     }
 
     .settings {
         position: absolute;
-        width: 80%;
+        width: 500px;
         height: 70%;
-        left: 10%;
+        left: 50%;
         bottom: 15%;
         color: rgb(0, 0, 0);
-        border: 0px solid white;
+        border: 2px solid white;
         font-size: 0.8em;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
         display: none;
+        transform: translate(-50%, 0%);
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
     }
 
     .dropdown {
@@ -758,7 +749,6 @@
         padding-left: 0.5em;
         padding-right: 0.5em;
         vertical-align: middle;
-        z-index: 0;
     }
 
     .bilibili {

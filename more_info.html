@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html style="scrollbar-width: none;">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width， initial-scale=1.0">
         <title>红苹果起始页-介绍</title>
         <style>
+            body{
+                overflow-x: hidden;
+                scrollbar-width: none;
+            }
             /*宇宙(划掉)滚动条安全声明*/
             ::-webkit-scrollbar {
                 width: 0px;
@@ -13,7 +17,7 @@
                 position: relative;
                 width: 650px;
                 border-radius: 12px;
-                box-shadow: 0px 0px 10px rgba(43, 43, 43, 0.688);
+                
                 left: 50%;
                 transform: translate(-50%,0);
                 text-align: center;
@@ -40,10 +44,10 @@
                 padding-bottom: 7px;
                 padding-left: 17px;
                 padding-right: 17px;
-                margin-top: 15px;
                 border-radius: 5px;
                 transform: translate(-50%,0);
                 background-color: rgb(32, 106, 255);
+                transition: 300ms;
             }
             
             .link_btn:hover{
@@ -51,31 +55,32 @@
                 box-shadow: 0px 0px 10px 1px rgb(0, 50, 255);
             }
 
-            .link_btn_nc{
-                position: absolute;
-                color: white;
-                text-decoration-line: none;
-                padding-top: 7px;
-                padding-bottom: 7px;
-                padding-left: 17px;
-                padding-right: 17px;
-                margin-top: 38px;
-                border-radius: 5px;
-                transform: translate(-50%,0);
-                background-color: rgb(32, 106, 255);
-            }
-
-            .link_btn_nc:hover{
-                background-color: rgb(0, 50, 255);
-                box-shadow: 0px 0px 10px 1px rgb(0, 50, 255);
-            }
-
             .main_box{
-                position: absolute;
+                position: relative;
                 width: 100%;
-
-                height: 200px;
+                left: 0%;
+                height: 600px;
                 margin-bottom: 10px;
+            }
+
+            .donate_box{
+                border: 1px solid rgba(0, 0, 0, 0);
+                position: absolute;
+                width: 50%;
+                left: 50%;
+                height: 300px;
+                margin-top: 340px;
+                text-align: left;
+            }
+
+            .proj_box{
+                border: 1px solid rgba(0, 0, 0, 0);
+                position: absolute;
+                width: 50%;
+                left: 0%;
+                height: 300px;
+                margin-top: 340px;
+                text-align: right;
             }
 
             .flink_box{
@@ -83,22 +88,17 @@
                 position: absolute;
                 width: 50%;
                 left: 50%;
-                height: 200px;
+                height: 300px;
                 margin-top: 40px;
                 text-align: left;
             }
 
-            .links_title{
-                padding-left: 10px;
-                font-size: 2.5rem;
-                line-height: 7px;
-                font-weight: lighter;
-            }
-            .flink{
-                padding-left: 10px;
+            .content{
                 font-size: 1.2rem;
-                line-height: 5px;
                 font-weight: lighter;
+                overflow-y: auto;
+                height: calc(300px - 2.5rem);
+                scrollbar-width: none;
             }
 
             .helpers_box{
@@ -106,20 +106,13 @@
                 position: absolute;
                 width: 50%;
                 left: 0%;
-                height: 200px;
+                height: 300px;
                 margin-top: 40px;
                 text-align: right;
             }
-            .helpers_title{
-                padding-right: 10px;
+            .sub_title{
                 font-size: 2.5rem;
                 line-height: 7px;
-                font-weight: lighter;
-            }
-            .helper{
-                padding-right: 10px;
-                font-size: 1.2rem;
-                line-height: 5px;
                 font-weight: lighter;
             }
 
@@ -127,34 +120,6 @@
                 color: #658eff;
             }
 
-            .review_box{
-                position: relative;
-                left: 50%;
-                transform: translate(-50%,0);
-                top: 200px;
-                width: 600px;
-                height: 200px;
-                padding-right: 10px;
-
-            }
-            .review_title{
-                position: absolute;
-                text-align: left;
-                font-size: 2rem;
-                font-weight: lighter;
-
-            }
-            .review_input{
-                width: 404px;
-            }
-            .review_input_area{
-                resize: none;
-            }
-            .review_main{
-                position: absolute;
-                top: 42px;
-                left: 10px;
-            }
             @media screen and (max-width:900px) and (min-width:600px){
                 .title_box{
                     width: 60vw;
@@ -162,6 +127,12 @@
                 }
                 .title{
                     margin: 0px;
+                }
+                .content{
+                    font-size: 1rem;
+                    overflow-y: auto;
+                    height: calc(300px - 2.5rem);
+                    scrollbar-width: none;
                 }
                 .description{
                     font-size: 1rem;
@@ -178,13 +149,11 @@
                     font-size: 3rem;
                     margin: 0px;
                 }
-                .helper{
+                .content{
                     font-size: 0.9rem;
-                    line-height: 0.9rem;
-                }
-                .flink{
-                    font-size: 0.9rem;
-                    line-height: 0.9rem;
+                    overflow-y: auto;
+                    height: calc(300px - 2.5rem);
+                    scrollbar-width: none;
                 }
                 .description{
                     font-size: 1rem;
@@ -201,22 +170,49 @@
             <div id="description" class="description">
                 努力让您的起始页变得更加美观、实用
             </div>
-            <a id="link_cn" class="link_btn" href="index.html">主页</a><br>
-            <a id="link_no_tracking" class="link_btn_nc" href="no_tracking.html">无统计版</a>
+            <a id="link_cn" class="link_btn" style="margin-top: 15px;" href="index.html">主页</a><br>
+            <a id="link_no_tracking" class="link_btn" style="margin-top: 38px;" href="https://yinghuo.work">萤火科技</a>
         </div>
 
         <div class="main_box">
             <div id="helpers_box" class="helpers_box">
-                <p class="helpers_title" id="helpers_title">特别感谢</p>
-                <p id="helper_1542766918" class="helper"><a class="link" href="https://space.bilibili.com/1542766918">风雨撒-ma</a>对开发的支持与鼓励</p>
-                <p id="helper_502242781" class="helper"><a class="link" href="https://space.bilibili.com/502242781">Stearsoft</a>为网站推荐便宜的虚拟主机</p>
-                <p id="helper_502242781" class="helper"><a class="link" href="http://yinghuo.work">萤火科技</a>提供的服务器及成员们的支持( •̀ ω •́ )</p>
+                <div style="padding-right: 10px;">
+                    <p class="sub_title" id="helpers_title">特别感谢</p>
+                    <div class="content">
+                        <p style="margin-top: 2px;margin-bottom: 2px;" id="helper_limestart">非常感谢<a class="link" href="https://limestart.cn">青柠起始页</a>，它的部分代码和页面交互逻辑让我受到了启发</p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;" id="helper_1542766918"><a class="link" href="https://space.bilibili.com/1542766918">风雨撒-ma</a>对开发的支持与鼓励</p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;" id="helper_502242781"><a class="link" href="https://space.bilibili.com/502242781">Stearsoft</a>为网站推荐便宜的虚拟主机</p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;" id="helper_yinghuo"><a class="link" href="http://yinghuo.work">萤火科技</a>提供的服务器及成员们的支持( •̀ ω •́ )</p>
+                    </div>
+                    
+                </div>
             </div>
             <div id="friendly_link_box" class="flink_box">
-                <p class="links_title" id="links_title">友情链接</p>
-                <p class="flink" ><a class="link" id="yubiusStart" class="flink" href="http://yinghuo.work">萤火科技</a> http://yinghuo.work</p>
-                <p class="flink" ><a class="link" id="yubiusStart" class="flink" href="https://yubius.com/">布斯起始页</a> https://yubius.com/</p>
-                <p class="flink" ><a class="link" id="wlog"  class="flink" href="https://blog.w03.cc/">wlog</a> https://blog.w03.cc/</p>
+                <div style="padding-left: 10px;">
+                    <p class="sub_title" >友情链接</p>
+                    <div class="content">
+                        <p style="margin-top: 2px;margin-bottom: 2px;"><a class="link" id="ByBlog" class="flink" href="https://blog.rastart.top">我的博客</a> https://blog.rastart.top</p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;"><a class="link" id="yubiusStart" class="flink" href="https://yubius.com/">布斯起始页</a> https://yubius.com/</p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;"><a class="link" id="wlog"  class="flink" href="https://blog.w03.cc/">wlog</a> https://blog.w03.cc/</p>
+                    </div>
+                </div>
+            </div>
+            <div id="proj_box" class="proj_box">
+                <div style="padding-left: 10px;">
+                    <p class="sub_title">使用的项目</p>
+                    <div class="content">
+                        <p style="margin-top: 2px;margin-bottom: 2px;">(用于替代原生JavaScript弹出式窗口)<a class="link" id="ByBlog" class="flink" href="https://www.sweetalert2.cn/">SweetAlert2</a></p>
+                        <p style="margin-top: 2px;margin-bottom: 2px;">(用于构建漂亮的选择框)<a class="link" id="yubiusStart" class="flink" href="https://lokesh-coder.github.io/pretty-checkbox/#more">PreetyCheckBox</a></p>
+                    </div>
+                </div>
+            </div>
+            <div id="donate_box" class="donate_box">
+                <div style="padding-left: 10px;">
+                    <p class="sub_title">捐助用户</p>
+                    <div class="content">
+                        <p style="margin-top: 2px;margin-bottom: 2px;"><a class="link" id="ByBlog" class="flink" href="https://afdian.net/u/6a3fb8dce5a611ecbc5152540025c377">风雨SAMA</a> ￥15</p>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

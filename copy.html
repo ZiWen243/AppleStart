@@ -1,0 +1,13 @@
+<!-- html -->
+<button onclick="copy('#copy-target')">复制</button>
+<!-- js -->
+<script>
+function copy(txt) {
+    var input = document.createElement("input");// 整一个input
+    input.setAttribute("value", txt);// 赋值
+    document.body.appendChild(input);// 添加节点
+    input.select();// 选取文本域中的内容
+    document.execCommand('Copy');// 复制
+    document.body.removeChild(input);// 删除掉没用的节点
+}
+</script>

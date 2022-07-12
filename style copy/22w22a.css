@@ -126,7 +126,7 @@
     height: 100%;
     z-index: -10;
     object-fit: cover;
-    src: "https://rastart.top/wallp/wp1.jpg";
+    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg";
     overflow: hidden;
 }
 
@@ -135,9 +135,12 @@
 .version {
     text-align: left;
     margin-left: 10%;
-    width: fit-content;
+    color: white;
+    padding-top: 1px;
+    padding-bottom: 1px;
     padding-left: 2px;
     padding-right: 2px;
+    width: fit-content;
     background-color: rgba(255, 58, 58, 0.938);
     border-radius: 3px;
 }
@@ -148,7 +151,7 @@
 }
 
 .about_history {
-    max-height: 100%;
+    max-height: calc(100% - 100px);
     overflow-y: auto;
     line-height: 1em;
     scrollbar-width: none;
@@ -171,8 +174,8 @@
 
 .about_lock {
     margin-top: 20px;
-    min-height: 100px;
-    line-height: 0.9em;
+    height: 85px;
+    line-height: 10px;
     overflow-y: unset;
 }
 
@@ -405,7 +408,7 @@
     }
 
     .quick_btn {
-        z-index: -1;
+        z-index: 0;
         position: absolute;
         color: white;
         top: 330px;
@@ -423,7 +426,7 @@
         bottom: 10%;
         color: rgb(0, 0, 0);
         border: 0px solid white;
-        font-size: 0.8em;
+        font-size: 12px;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
         display: none;
@@ -454,6 +457,7 @@
     .dropdown {
         transform: translate(-50%, 0%);
         margin-top: 20px;
+        z-index: 3;
         position: absolute;
         left: 50%;
         top: 240px;
@@ -540,7 +544,7 @@
         bottom: 10%;
         color: rgb(0, 0, 0);
         border: 0px solid white;
-        font-size: 0.8em;
+        font-size: 12px;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
         display: none;
@@ -706,7 +710,7 @@
         bottom: 15%;
         color: rgb(0, 0, 0);
         border: 0px solid white;
-        font-size: 0.8em;
+        font-size: 12px;
         background-color: rgba(255, 255, 255, 0.7);
         border-radius: 15px;
         display: none;

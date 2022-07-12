@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "493429",
+      "name": "计算器",
+      "font_class": "jisuanqi",
+      "unicode": "e79b",
+      "unicode_decimal": 59291
+    },
+    {
+      "icon_id": "77403",
+      "name": "链接",
+      "font_class": "lianjie",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "5978718",
+      "name": "calculation",
+      "font_class": "jisuan",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "8643179",
+      "name": "百科",
+      "font_class": "baike",
+      "unicode": "e7cb",
+      "unicode_decimal": 59339
+    },
+    {
+      "icon_id": "27402504",
+      "name": "左右箭头",
+      "font_class": "zuoyoujiantou",
+      "unicode": "ee31",
+      "unicode_decimal": 60977
+    },
+    {
       "icon_id": "11006409",
       "name": "壁纸",
       "font_class": "bizhi",

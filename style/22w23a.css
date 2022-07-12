@@ -123,7 +123,7 @@ body{
     height: 100%;
     z-index: -10;
     object-fit: cover;
-    src: "https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg?cs=srgb&dl=pexels-james-wheeler-417074.jpg&fm=jpg";
+    src: "https://rastart.top/wallp/wp1.jpg";
     overflow: hidden;
 }
 
@@ -142,12 +142,13 @@ body{
 }
 
 .version_txt {
+    text-indent: 20px;
     text-align: left;
 }
 
 .about_history {
     position: absolute;
-    height: calc(100% - 170px);
+    height: calc(100% - 150px);
     overflow-y: auto;
     line-height: 1em;
     width: 80%;
@@ -175,9 +176,10 @@ body{
 
 .about_lock {
     margin-top: 20px;
-    height: 150px;
+    height: 170px;
     line-height: 10px;
-    overflow-y: unset;
+    transition: .3s;
+    overflow: hidden;
 }
 
 #link{
@@ -186,19 +188,21 @@ body{
 
 .close {
     position: absolute;
-    right: 7px;
+    right: 10px;
     top: -10px;
-    height: 30px;
-    width: 30px;
-    line-height: 30px;
+    height: 35px;
+    width: 45px;
+    line-height: 35px;
     font-size: 20px;
     text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .close:hover {
-    background-color: gray;
-    border: 0px solid gray;
-    border-radius: 20px;
+    background-color: rgb(230, 230, 230);
+    border: 0px solid rgb(230, 230, 230);
+    border-radius: 7px;
     cursor: pointer;
 }
 
@@ -207,7 +211,8 @@ body{
 }
 
 .settings_lock {
-    min-height: 100px; 
+    min-height: 50px;
+    border-bottom: 1px solid rgb(212, 212, 212);
     overflow: hidden;
 }
 
@@ -224,10 +229,12 @@ body{
 
 .settings_title {
     position: absolute;
-    top: -4px;
+    top: 0px;
     text-align: left;
-    left: 20px;
-    font-size: 1.4em;
+    left: 50%;
+    transform: translate(-50%,0);
+    font-size: 25px;
+    line-height: 5px;
     color: rgb(255, 58, 58);
 }
 
@@ -260,8 +267,8 @@ body{
     position: absolute;
     text-align: left;
     left: 5%;
-    top: 10%;
-    height: 90%;
+    top: 50px;
+    height: calc(100% - 50px);
     width: 90%;
     overflow-y: auto;
     scrollbar-width: none;
@@ -276,9 +283,9 @@ body{
 }
 
 .body {
-    color: rgb(0, 0, 0);
+    color: rgb(80, 80, 80);
     overflow: hidden;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(80, 80, 80);
 }
 
 ::-webkit-scrollbar {
@@ -289,6 +296,7 @@ body{
     border-radius: 14px;
     background-color: rgba(255, 255, 255, .5);
     position: absolute;
+    color: rgb(35, 35, 35);
     min-width: 80px;
     display: none;
     z-index: 5;
@@ -315,6 +323,7 @@ body{
 .dropdown-btn {
     width: 80px;
     height: 30px;
+    outline:none;
     background-color: rgba(255, 255, 255, 0.5);
     border: 0px solid rgb(255, 255, 255);
     border-radius: 17px;
@@ -323,6 +332,16 @@ body{
     color: rgb(255, 255, 255);
 }
 
+.setting_switch{
+    position: absolute;
+    right: 0%;
+}
+
+@media screen and (max-height:400px){
+    .about_btn{
+        display: none;
+    }
+}
 @media screen and (min-width:900px) {
     .search {
         margin-top: 10px;
@@ -341,6 +360,17 @@ body{
         transform: translate(-50%, 0%);
         text-align: center;
         transition: 300ms;
+        backdrop-filter: blur(5px);
+    }
+
+    .search:hover {
+        width: 700px;
+        background-color: rgba(182, 182, 182, .4);
+    }
+
+    .search[focus] {
+        width: 700px;
+        background-color: rgba(32, 32, 32, .6);
     }
 
 
@@ -423,13 +453,13 @@ body{
         color: rgb(0, 0, 0);
         border: 0px solid white;
         font-size: 12px;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgb(255, 255, 255);
         border-radius: 15px;
         display: none;
         transform: translate(-50%, 0%);
         text-align: center;
         overflow-y: hidden;
-        z-index: 10;
+        z-index: 11;
     }
 
     .settings {
@@ -441,13 +471,13 @@ body{
         color: rgb(0, 0, 0);
         border: 0px solid white;
         font-size: 0.8em;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgb(255, 255, 255);
         border-radius: 15px;
         display: none;
         transform: translate(0%, 0%);
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
+        z-index: 3;
     }
 
     .dropdown {
@@ -571,7 +601,7 @@ body{
         color: rgb(0, 0, 0);
         border: 0px solid white;
         font-size: 12px;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgb(255, 255, 255);
         border-radius: 15px;
         display: none;
         transform: translate(-50%, 0%);
@@ -595,7 +625,7 @@ body{
         transform: translate(0%, 0%);
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
+        z-index: 3;
     }
 
     .dropdown {
@@ -673,6 +703,36 @@ body{
         transform: translate(-50%, 0px);
         cursor: pointer;
     }
+    .suggestions{
+        position: absolute;
+        margin-top: 10px;
+        width: 500px;
+        border-radius: 20px;
+        left: 50%;
+        transform: translate(-50%,0);
+        top: 280px;
+        background: rgba(255, 255, 255, 0.6);
+        height: 300px;
+        max-height: 320px;
+        overflow: auto;
+        scrollbar-width: none;
+        transition: 300ms;
+        z-index: 1;
+    }
+    .suggestion{
+        height: 30px;
+        line-height: 30px;
+        overflow-x: hidden;
+        color: rgb(32, 32, 32);
+        font-family: "微软雅黑", "苹方", "Arial", "黑体", '宋体';
+        background-color: rgba(255, 255, 255, 0.6);
+        text-indent: 30px;
+        cursor: pointer;
+        display: block;
+    }
+    .suggestion:hover{
+        background-color: rgb(255, 255, 255);
+    }
 }
 
 @media screen and (max-width:600px){
@@ -737,7 +797,7 @@ body{
         color: rgb(0, 0, 0);
         border: 0px solid white;
         font-size: 12px;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgb(255, 255, 255);
         border-radius: 15px;
         display: none;
         transform: translate(-50%, 0%);
@@ -760,7 +820,7 @@ body{
         display: none;
         text-align: center;
         scrollbar-width: none;
-        z-index: 1;
+        z-index: 3;
     }
 
     .dropdown {
@@ -837,5 +897,35 @@ body{
         background-color: rgba(255, 255, 255, .3);
         transform: translate(-50%, 0px);
         cursor: pointer;
+    }
+    .suggestions{
+        position: absolute;
+        margin-top: 10px;
+        width: 90%;
+        border-radius: 20px;
+        left: 50%;
+        transform: translate(-50%,0);
+        top: 280px;
+        background: rgba(255, 255, 255, 0.6);
+        height: 300px;
+        max-height: 320px;
+        overflow: auto;
+        scrollbar-width: none;
+        transition: 300ms;
+        z-index: 1;
+    }
+    .suggestion{
+        height: 30px;
+        line-height: 30px;
+        overflow-x: hidden;
+        color: rgb(32, 32, 32);
+        font-family: "微软雅黑", "苹方", "Arial", "黑体", '宋体';
+        background-color: rgba(255, 255, 255, 0.6);
+        text-indent: 30px;
+        cursor: pointer;
+        display: block;
+    }
+    .suggestion:hover{
+        background-color: rgb(255, 255, 255);
     }
 }
